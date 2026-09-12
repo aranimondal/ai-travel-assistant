@@ -1,0 +1,22 @@
+{
+  "built_at": "2026-09-12T17:18:37+00:00",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "chunk_size": 1100,
+  "chunk_overlap": 150,
+  "documents": 12,
+  "chunks": 692,
+  "sources": [
+    "Wikipedia: Mass Rapid Transit (Singapore) <https://en.wikipedia.org/wiki/Mass_Rapid_Transit_(Singapore)>",
+    "Wikipedia: Singaporean cuisine <https://en.wikipedia.org/wiki/Singaporean_cuisine>",
+    "Wikipedia: Tourism in Singapore <https://en.wikipedia.org/wiki/Tourism_in_Singapore>",
+    "Wikivoyage: Singapore travel guide <https://en.wikivoyage.org/wiki/Singapore>",
+    "Wikivoyage: Singapore/Bugis and Kampong Glam <https://en.wikivoyage.org/wiki/Singapore/Bugis>",
+    "Wikivoyage: Singapore/Chinatown <https://en.wikivoyage.org/wiki/Singapore/Chinatown>",
+    "Wikivoyage: Singapore/East Coast <https://en.wikivoyage.org/wiki/Singapore/East_Coast>",
+    "Wikivoyage: Singapore/Little India <https://en.wikivoyage.org/wiki/Singapore/Little_India>",
+    "Wikivoyage: Singapore/Marina Bay <https://en.wikivoyage.org/wiki/Singapore/Marina_Bay>",
+    "Wikivoyage: Singapore/Orchard <https://en.wikivoyage.org/wiki/Singapore/Orchard>",
+    "Wikivoyage: Singapore/Riverside <https://en.wikivoyage.org/wiki/Singapore/Riverside>",
+    "Wikivoyage: Singapore/Sentosa and Harbourfront <https://en.wikivoyage.org/wiki/Singapore/Sentosa_and_Harbourfront>"
+  ]
+}
