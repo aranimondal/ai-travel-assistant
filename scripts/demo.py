@@ -59,9 +59,13 @@ SCENARIOS: list[tuple[str, str, list[str]]] = [
         ],
     ),
     (
-        "E. Missing knowledge — no fabrication",
-        "The knowledge base has no data for this; the assistant must say so.",
-        ["What are the 2026 ticket prices for the Singapore Grand Prix paddock club?"],
+        "E. Missing knowledge and tool failures — no fabrication",
+        "The knowledge base has no data for the first question; the second asks for a currency "
+        "the rate service does not publish.",
+        [
+            "What are the 2026 ticket prices for the Singapore Grand Prix paddock club?",
+            "Convert 100 ZWL to SGD.",
+        ],
     ),
 ]
 

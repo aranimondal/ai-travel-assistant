@@ -306,8 +306,8 @@ generator, so a misconfiguration is visible immediately.
 ### Test
 
 ```bash
-pytest -m "not network and not index"     # 64 unit tests, offline, ~3 s
-pytest -m "index and network"             # end-to-end: real FAISS index + real MCP subprocess
+pytest -m "not network and not index"     # 67 unit tests, offline, ~3 s
+pytest -m "index and network"             # 9 end-to-end tests: real FAISS index + real MCP subprocess
 pytest                                    # everything
 ruff check src tests scripts app          # lint
 ```
@@ -348,11 +348,12 @@ Expect `[route: weather tool]` / `[route: currency tool]`, a
 `MCP get_weather_forecast {'location': 'Singapore', 'days': 3} -> ok` line, and values labelled
 `[Live: MCP tool ...]` with the upstream source named.
 
-To see failure handling without breaking anything, ask for an unsupported pair — the tool reports
-the error and the answer states the data is unavailable instead of inventing a rate:
+To see failure handling without breaking anything, ask for a currency the rate service does not
+publish — the tool reports the error and the answer states the data is unavailable instead of
+inventing a rate:
 
 ```bash
-python scripts/chat.py --ask "Convert 100 XXX to SGD."
+python scripts/chat.py --ask "Convert 100 ZWL to SGD."
 ```
 
 ### C. RAG + MCP combined
@@ -435,7 +436,7 @@ ai-travel-assistant/
 ├─ scripts/{build_kb,chat,demo}.py
 ├─ src/travel_assistant/           # orchestration, RAG, MCP client, prompts
 ├─ src/travel_mcp/                 # MCP server and its upstream clients
-├─ tests/                          # 64 unit tests + end-to-end scenario tests
+├─ tests/                          # 67 unit tests + 9 end-to-end scenario tests
 ├─ requirements.txt / requirements-dev.txt
 └─ .env.example
 ```
