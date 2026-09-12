@@ -85,6 +85,44 @@ def test_day_counts_do_not_trigger_a_currency_conversion() -> None:
     assert not intent.needs_currency
 
 
+@pytest.mark.parametrize(
+    ("question", "source"),
+    [
+        ("Convert 5000 PHP to SGD", "PHP"),
+        ("What is 300 AUD worth in SGD?", "AUD"),
+        ("Convert 100 ZWL to SGD.", "ZWL"),
+    ],
+)
+def test_any_iso_shaped_code_is_recognised(question: str, source: str) -> None:
+    # Codes are not whitelisted: whether one is actually published is decided by
+    # the MCP tool, which reports an error rather than guessing a rate.
+    intent = classify(question)
+    assert intent.needs_currency
+    assert intent.currency.from_currency == source
+
+
+@pytest.mark.parametrize(
+    "question",
+    [
+        "What are the 2026 ticket prices for the Singapore Grand Prix paddock club?",
+        "Is the MRT the best way to get around for one day?",
+        "Can you plan a trip for two people to see the zoo?",
+        "I want to eat at a hawker centre and see the bay.",
+        "What is the weather forecast for the next three days?",
+    ],
+)
+def test_three_letter_words_are_not_read_as_currencies(question: str) -> None:
+    assert not classify(question).needs_currency
+    assert currency_codes(question) == []
+
+
+def test_conversion_request_without_an_amount_still_routes_to_the_tool() -> None:
+    # The assistant can then reuse a remembered budget, or explain what is missing.
+    intent = classify("Convert my budget to SGD")
+    assert intent.needs_currency
+    assert intent.currency.amount is None
+
+
 def test_unclassified_question_falls_back_to_the_knowledge_base() -> None:
     # The knowledge base is allowed to answer "not enough information";
     # silently answering from model memory is not.
@@ -100,4 +138,6 @@ def test_parse_amount(text: str, expected: float | None) -> None:
 
 
 def test_currency_codes_preserve_order_of_appearance() -> None:
+    assert currency_codes("Convert 100 USD to SGD")[:2] == ["USD", "SGD"]
+    # Casual lower-case spellings of common codes are handled too.
     assert currency_codes("convert 100 usd to sgd")[:2] == ["USD", "SGD"]

@@ -30,7 +30,7 @@ WEATHER_TERMS = (
     "umbrella",
 )
 
-CURRENCY_TERMS = ("convert", "exchange rate", "currency", "how much is", "in rupees", "worth in")
+CURRENCY_TERMS = ("convert", "exchange rate", "currency", "how much is", "worth in")
 
 KB_TERMS = (
     "attraction",
@@ -78,6 +78,7 @@ KB_TERMS = (
 
 # "60,000 INR", "INR 60000", "$200", "200 SGD", "60k rupees"
 CURRENCY_SYMBOLS = {"₹": "INR", "$": "USD", "€": "EUR", "£": "GBP", "¥": "JPY", "s$": "SGD"}
+# Colloquial names and casual lower-case spellings of the codes travellers use most.
 CURRENCY_WORDS = {
     "rupee": "INR",
     "rupees": "INR",
@@ -96,13 +97,20 @@ CURRENCY_WORDS = {
     "gbp": "GBP",
     "yen": "JPY",
     "jpy": "JPY",
-    "aed": "AED",
-    "aud": "AUD",
-    "cad": "CAD",
-    "myr": "MYR",
-    "thb": "THB",
-    "idr": "IDR",
 }
+
+# Any upper-case ISO-4217-shaped token sitting next to an amount ("100 ZWL",
+# "60k INR", "SGD 200") or following a conversion preposition ("to SGD").
+# Matching upper case only is what keeps ordinary words out ("the 2026 prices",
+# "to see the zoo") without a stop-word list, and it is how codes are written in
+# practice; casual lower-case spellings of common codes are covered above.
+# Whether a code is actually published is decided by the MCP tool, which reports
+# an error rather than guessing a rate.
+ISO_CODE = re.compile(
+    r"(?:(?<=\d)|(?<=\dk)|(?<=lakh)|(?<=lakhs))\s*([A-Z]{3})\b"
+    r"|\b(?:to|in|into|from|worth in)\s+([A-Z]{3})\b"
+    r"|\b([A-Z]{3})\s*(?=[\d₹$€£])"
+)
 
 AMOUNT_RE = re.compile(r"(?<![\w.])(\d{1,3}(?:,\d{2,3})+|\d+(?:\.\d+)?)\s*(k|lakh|lakhs)?", re.I)
 DAYS_RE = re.compile(
@@ -170,6 +178,11 @@ def currency_codes(text: str) -> list[str]:
         for match in re.finditer(rf"\b{re.escape(word)}\b", lowered):
             found.append((match.start(), code))
 
+    for match in ISO_CODE.finditer(text):
+        token = match.group(1) or match.group(2) or match.group(3)
+        if token:
+            found.append((match.start(), token.upper()))
+
     ordered: list[str] = []
     for _, code in sorted(found):
         if code not in ordered:
@@ -201,20 +214,24 @@ def _contains(text: str, terms: tuple[str, ...]) -> bool:
 
 def classify(question: str, *, destination_currency: str = "SGD") -> Intent:
     """Decide which sources a question needs and extract tool arguments."""
-    text = question.lower().strip()
+    question = question.strip()
+    text = question.lower()
     intent = Intent()
 
     intent.needs_weather = _contains(text, WEATHER_TERMS) or bool(
         re.search(r"\b(indoor|outdoor)\b.*\b(tomorrow|today|this week|next week)\b", text)
     )
 
-    codes = currency_codes(text)
+    # Currency detection needs the original casing: ISO codes are matched upper case.
+    codes = currency_codes(question)
     amount = parse_amount(text)
-    money_words = _contains(text, CURRENCY_TERMS) or bool(
-        re.search(r"\bbudget\b|\bcost\b.*\bin\b\s*[a-z]{3}\b", text)
-    )
-    # A conversion needs an explicit currency mention; "3 days" alone must not trigger it.
-    intent.needs_currency = bool(codes) and (money_words or amount is not None)
+    asks_conversion = _contains(text, CURRENCY_TERMS)
+    # A conversion needs a currency mention, and an amount either in the question
+    # or remembered from the conversation. Requiring the amount here keeps
+    # "3 days" and stray three-letter words ("to see", "to eat") from being read
+    # as money; an explicit conversion request without an amount still routes to
+    # the tool so the assistant can explain what is missing.
+    intent.needs_currency = bool(codes) and (amount is not None or asks_conversion)
 
     if intent.needs_currency:
         source = codes[0] if codes else None
