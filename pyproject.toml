@@ -1,0 +1,24 @@
+[project]
+name = "ai-travel-assistant"
+version = "1.0.0"
+description = "Context-aware Singapore travel planning assistant combining a document knowledge base (RAG) with live data from MCP tools"
+requires-python = ">=3.11"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+markers = [
+    "network: test requires outbound internet access",
+    "index: test requires a built FAISS index (run scripts/build_kb.py first)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
