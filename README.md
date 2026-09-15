@@ -164,7 +164,7 @@ python scripts/demo.py --write docs/SAMPLE_QA.md
 
 A short video is recommended for evaluation. Record the Streamlit window while showing the five flows above. Keep it focused on the user/assistant interaction, source/provenance panel, MCP tool calls, the combined RAG+MCP response, and retained conversational context.
 
-## 8. Tests and CI
+## 8. Tests
 
 Run locally:
 
@@ -172,7 +172,7 @@ Run locally:
 python -m pytest -q
 ```
 
-The CI workflow installs dependencies and pytest, then runs the test suite on pushes and pull requests. Tests cover routing, tool-argument extraction, RAG/MCP combinations, currency edge cases and prompt evidence-boundary contracts.
+Tests cover routing, tool-argument extraction, RAG/MCP combinations, currency edge cases and prompt evidence-boundary contracts.
 
 ## 9. Scope
 
