@@ -1,0 +1,14 @@
+.git
+.github
+.gitignore
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.env
+.streamlit/secrets.toml
+knowledge_base/index
+knowledge_base/.cache
