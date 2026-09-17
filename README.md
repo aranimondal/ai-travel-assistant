@@ -38,9 +38,30 @@ Scope is deliberately narrow: destination knowledge, weather and currency for on
 | `src/travel_assistant/context.py` | Renders retrieved chunks and tool results into labelled prompt context. |
 | `src/travel_assistant/composer.py` | Deterministic grounded composer used when no LLM credential is configured. |
 | `src/travel_assistant/conversation.py` | Rolling history plus sticky traveller preferences and follow-up expansion. |
+| `src/travel_assistant/llm.py` | Provider-agnostic LangChain LLM integration, including local Ollama support. |
 | `src/travel_mcp/` | Custom MCP server implemented for this assignment: FastMCP weather and currency tools. No ready-made travel MCP server is required. |
 | `app/streamlit_app.py` | Chat UI with provenance and subsystem status panels. |
 | `scripts/` | KB build, CLI chat and repeatable demo scenarios. |
+| `knowledge_base/` | Local Singapore travel source documents and the persisted FAISS index. |
+
+### Important implementation links
+
+| Link | Purpose |
+|---|---|
+| [`assistant.py`](src/travel_assistant/assistant.py) | Main orchestration: routes the request, retrieves RAG evidence, calls MCP tools, builds context and invokes the LLM. |
+| [`router.py`](src/travel_assistant/router.py) | Determines the request intent and whether RAG, weather MCP, currency MCP or a combination is required. |
+| [`mcp_client.py`](src/travel_assistant/mcp_client.py) | MCP client bridge that starts the custom server over stdio, invokes tools and records tool failures/results. |
+| [`server.py`](src/travel_mcp/server.py) | Custom FastMCP server exposing `get_weather_forecast` and `convert_currency`. |
+| [`kb/retriever.py`](src/travel_assistant/kb/retriever.py) | Performs semantic retrieval of relevant knowledge-base chunks. |
+| [`kb/store.py`](src/travel_assistant/kb/store.py) | Builds, persists, loads and searches the FAISS vector index. |
+| [`kb/embeddings.py`](src/travel_assistant/kb/embeddings.py) | Embedding implementation using FastEmbed/BGE. |
+| [`prompts.py`](src/travel_assistant/prompts.py) | Grounding and provenance rules used by the LLM prompt. |
+| [`context.py`](src/travel_assistant/context.py) | Separates traveller preferences, KB evidence and live MCP results before generation. |
+| [`llm.py`](src/travel_assistant/llm.py) | Provider-agnostic LangChain chat-model selection, including Ollama for local LLM execution. |
+| [`conversation.py`](src/travel_assistant/conversation.py) | Maintains rolling conversation history, preferences and contextual follow-ups. |
+| [`build_kb.py`](scripts/build_kb.py) | Fetches/processes supported sources and rebuilds the local knowledge-base/index. |
+| [`streamlit_app.py`](app/streamlit_app.py) | Streamlit UI and visible provenance/status panels for evaluator demonstrations. |
+| [`knowledge_base/`](knowledge_base/) | Local Singapore travel documents, metadata and persisted retrieval assets. |
 
 ### Data flow for one question
 
@@ -177,3 +198,15 @@ Tests cover routing, tool-argument extraction, RAG/MCP combinations, currency ed
 ## 9. Scope
 
 The assistant is intentionally limited to travel planning. It does not perform bookings, payments, reservations or route navigation.
+
+## 10. External technology and data links
+
+| Link | Purpose |
+|---|---|
+| [LangChain](https://www.langchain.com/) | LLM orchestration, prompt handling and application integration. |
+| [FAISS](https://github.com/facebookresearch/faiss) | Local vector similarity search used by the RAG knowledge base. |
+| [FastEmbed](https://qdrant.github.io/fastembed/) | Local text embedding generation for semantic retrieval. |
+| [Model Context Protocol](https://modelcontextprotocol.io/) | Standard protocol used for the custom MCP client/server integration. |
+| [Ollama](https://ollama.com/) | Local LLM runtime supported by the provider-agnostic LLM layer. |
+| [Open-Meteo](https://open-meteo.com/) | Upstream source for live weather/current forecast data used by the MCP weather tool. |
+| [Frankfurter](https://www.frankfurter.app/) | Upstream service providing exchange-rate data used by the MCP currency tool. |
