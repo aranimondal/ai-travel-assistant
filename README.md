@@ -199,14 +199,20 @@ Tests cover routing, tool-argument extraction, RAG/MCP combinations, currency ed
 
 The assistant is intentionally limited to travel planning. It does not perform bookings, payments, reservations or route navigation.
 
-## 10. External technology and data links
+## 10. Important URLs
 
-| Link | Purpose |
+| URL | Purpose |
 |---|---|
-| [LangChain](https://www.langchain.com/) | LLM orchestration, prompt handling and application integration. |
-| [FAISS](https://github.com/facebookresearch/faiss) | Local vector similarity search used by the RAG knowledge base. |
-| [FastEmbed](https://qdrant.github.io/fastembed/) | Local text embedding generation for semantic retrieval. |
-| [Model Context Protocol](https://modelcontextprotocol.io/) | Standard protocol used for the custom MCP client/server integration. |
-| [Ollama](https://ollama.com/) | Local LLM runtime supported by the provider-agnostic LLM layer. |
-| [Open-Meteo](https://open-meteo.com/) | Upstream source for live weather/current forecast data used by the MCP weather tool. |
-| [Frankfurter](https://www.frankfurter.app/) | Upstream service providing exchange-rate data used by the MCP currency tool. |
+| [GitHub Repository](https://github.com/aranimondal/ai-travel-assistant) | Main project repository containing the complete source code, knowledge base, MCP server/client, tests and documentation. |
+| [README](https://github.com/aranimondal/ai-travel-assistant/blob/main/README.md) | Main project documentation, architecture, setup instructions, demo flows and evaluator checklist. |
+| [Local Streamlit App](http://localhost:8501) | Application URL after starting Streamlit with `python -m streamlit run app/streamlit_app.py`. This is the local development/evaluation URL; the project intentionally has no deployed public application URL. |
+| [Localhost](http://localhost:8501) | Direct browser endpoint for the Streamlit application during local execution. |
+| [Open-Meteo](https://open-meteo.com/) | Public weather data source used by the custom MCP weather tool. |
+| [Frankfurter](https://www.frankfurter.app/) | Public exchange-rate service used by the custom MCP currency tool. |
+| [Model Context Protocol](https://modelcontextprotocol.io/) | Protocol documentation relevant to the custom MCP client/server implementation. |
+| [Ollama](https://ollama.com/) | Local LLM runtime supported by the provider-agnostic LLM integration. |
+| [LangChain](https://www.langchain.com/) | Framework used for LLM orchestration and MCP/RAG integration. |
+| [FAISS](https://github.com/facebookresearch/faiss) | Vector similarity-search library used for the local RAG index. |
+| [FastEmbed](https://qdrant.github.io/fastembed/) | Local embedding library used to generate semantic retrieval vectors. |
+
+> **Note:** The application is intentionally configured for local evaluation. There is no Render/AWS/other hosted deployment URL, Docker deployment, or GitHub Actions deployment workflow in this project.
