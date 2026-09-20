@@ -1,5 +1,5 @@
 ---
-title: Visit Singapore: Itineraries
+title: "Visit Singapore: Itineraries"
 source_url: https://www.visitsingapore.com/travel-tips/travelling-to-singapore/itineraries/
 publisher: Singapore Tourism Board (Visit Singapore)
 license: Refer to source terms
