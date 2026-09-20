@@ -205,6 +205,7 @@ The assistant is intentionally limited to travel planning. It does not perform b
 |---|---|
 | [GitHub Repository](https://github.com/aranimondal/ai-travel-assistant) | Main project repository containing the complete source code, knowledge base, MCP server/client, tests and documentation. |
 | [README](https://github.com/aranimondal/ai-travel-assistant/blob/main/README.md) | Main project documentation, architecture, setup instructions, demo flows and evaluator checklist. |
+| [Development Setup & Local Evaluation](docs/DEVELOPMENT_SETUP.md) | Complete evaluator runbook for cloning the repository, creating the Python environment, installing dependencies, configuring the LLM, building the KB, starting the Streamlit app in development mode, running tests, and verifying RAG + MCP + LLM flows. |
 | [Local Streamlit App](http://localhost:8501) | Application URL after starting Streamlit with `python -m streamlit run app/streamlit_app.py`. This is the local development/evaluation URL; the project intentionally has no deployed public application URL. |
 | [Localhost](http://localhost:8501) | Direct browser endpoint for the Streamlit application during local execution. |
 | [Open-Meteo](https://open-meteo.com/) | Public weather data source used by the custom MCP weather tool. |
